@@ -9,12 +9,12 @@ Options:
   # ActionBar messages.
   Messages:
     - Type: Plain  # Message type.
-      Message: 'Hello, %player_displayname%!'  # The text displayed.
+      Message: '&eHello, %player_displayname%!'  # The text displayed.
       Permission: ''  # Required permission. Leave it empty or remove it to ignore permission check.
       Times: 40  # How many times after sending this message to next message.
       Interval: 1  # How many ticks to send for each time.
     - Type: Plain
-      Message: 'Welcome to my server!'
+      Message: '&6Welcome to my server!'
       Permission: ''
       Times: 40
       Interval: 1
