@@ -1,0 +1,25 @@
+Options:
+  # Plugin used Locale.
+  Locale: 'en-US'
+  Compromise:
+    # Stop sending ActionBar when there's another ActionBar message.
+    Enable: true
+    # Wait how many milliseconds to continue sending messages. 2000ms to start fading, 3000ms to finish fading.
+    Interval: 3100
+  # ActionBar messages.
+  Messages:
+    - Type: Plain  # Message type.
+      Message: 'Hello, %player_displayname%!'  # The text displayed.
+      Permission: ''  # Required permission. Leave it empty or remove it to ignore permission check.
+      Times: 40  # How many times after sending this message to next message.
+      Interval: 1  # How many ticks to send for each time.
+    - Type: Plain
+      Message: 'Welcome to my server!'
+      Permission: ''
+      Times: 40
+      Interval: 1
+    - Type: Json
+      Message: '{"text":"This is a Json message! You are using ", "extra":[{"translate":"language.name", "color":"dark_aqua", "bold":true}, {"text":" to play Minecraft!"}]}'
+      Permission: ''
+      Times: 20
+      Interval: 2

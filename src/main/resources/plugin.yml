@@ -1,0 +1,16 @@
+name: ActionBarMessager
+main: io.github.rothes.actionbarmessager.bukkit.ActionBarMessager
+version: ${projectVersionString}
+author: Rothes
+commands:
+  actionbarmessager:
+    description: Main commands.
+    aliases:
+      - abm
+permissions:
+  'actionbarmessager.command.toggle':
+    description: Allow you to toggle reciving status.
+    default: true
+  'actionbarmessager.command.reload':
+    description: Allow you to reload the plugin.
+    default: op

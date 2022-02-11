@@ -1,0 +1,25 @@
+Options:
+  # 插件本地化语言.
+  Locale: 'zh-CN'
+  Compromise:
+    # 当有其他 ActionBar 消息时暂停发送信息.
+    Enable: true
+    # 等待多少毫秒后重新开始发送消息. 2000ms 为开始淡化的时间, 3000ms 为淡化完毕的时间.
+    Interval: 3100
+  # ActionBar 消息列表.
+  Messages:
+    - Type: Plain  # 文本类型.
+      Message: '&e你好, %player_displayname%!'  # 显示的文本.
+      Permission: ''  # 需要的权限. 留空或不填为忽略.
+      Times: 40  # 这条消息发送多少次后发送下条消息.
+      Interval: 1  # 每隔多少 tick 发送一次.
+    - Type: Plain
+      Message: '&6欢迎来到我的服务器!'
+      Permission: ''
+      Times: 40
+      Interval: 1
+    - Type: Json
+      Message: '{"text":"这是一条 Json 消息! 您正在使用 ", "extra":[{"translate":"language.name", "color":"dark_aqua", "bold":true}, {"text":" 游玩我的世界!"}]}'
+      Permission: ''
+      Times: 20
+      Interval: 2

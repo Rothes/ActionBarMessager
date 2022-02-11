@@ -1,0 +1,31 @@
+{
+  "Version_Channels": {
+    "Stable": {
+      "Latest_Version_Number": 1,
+      "Message": {
+        "en-US": "§bA new version (\"1.0\") is available!\n§bDownload here: ",
+        "zh-CN": "§b插件有新版本 (\"1.0\") 了!\n§b请更新您的插件: "
+      }
+    }
+  },
+  "Version_Actions": {
+    "0-99": {
+      "Log_Level": "Info",
+      "Actions": [],
+      "Message_Times": 2,
+      "Message": {
+        "en-US": "§bEnjoy this plugin? Join our Discord: https://discord.gg/zwzzkmYCBb",
+        "zh-CN": "§b欢迎加入我们的空巢 QQ群: 422532220 !"
+      }
+    },
+    "0-0": {
+      "Log_Level": "Error",
+      "Actions": ["Prohibit"],
+      "Message_Times": 1,
+      "Message": {
+        "en-US": "§cThe version of ABM you are running has been prohibited by the server. This is usually due to a serious problem. Please update the plugin.",
+        "zh-CN": "§c您使用的版本已被远程服务器禁止. 这通常是因为该版本存在重大问题. 请更新插件."
+      }
+    }
+  }
+}
