@@ -51,6 +51,7 @@ public final class User {
     }
 
     public void setReceiveMessages(boolean receiveMessages) {
+        data.set("Options.Receive-Messages", receiveMessages);
         this.receiveMessages = receiveMessages;
     }
 
