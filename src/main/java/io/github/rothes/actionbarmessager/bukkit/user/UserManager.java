@@ -13,7 +13,15 @@ public final class UserManager {
     }
 
     public User removeUser(Player player) {
+        if (userMap.containsKey(player))
+            userMap.get(player).saveData();
         return userMap.remove(player);
+    }
+
+    public void saveAllData() {
+        for (User user : userMap.values()) {
+            user.saveData();
+        }
     }
 
     public void reload() {

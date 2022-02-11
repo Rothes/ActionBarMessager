@@ -41,6 +41,7 @@ public final class ActionBarMessager extends JavaPlugin {
     public void onDisable() {
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelTasks(this);
+        userManager.saveAllData();
     }
 
     @Override
