@@ -9,7 +9,7 @@ Sender:
   Commands:
     No-Permission: '&c您没有权限这么做.'
     Help:
-      Header: '&7&m------&7&l &7[ &c&lActionBarMessager&7 ]&l &7&m------'
+      Header: '&7&m--------&7&l &7[ &c&lActionBarMessager&7 ]&l &7&m--------'
       Toggle: '&7 * &e/abm toggle &7- &b切换消息接收状态'
       Reload: '&7 * &e/abm reload &7- &b重载插件配置'
       Footer: '&7&m-----------------------------------------'

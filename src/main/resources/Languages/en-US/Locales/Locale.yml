@@ -9,7 +9,7 @@ Sender:
   Commands:
     No-Permission: '&cYou don''t have the permission to do that.'
     Help:
-      Header: '&7&m------&7&l &7[ &c&lActionBarMessager&7 ]&l &7&m------'
+      Header: '&7&m--------&7&l &7[ &c&lActionBarMessager&7 ]&l &7&m--------'
       Toggle: '&7 * &e/abm toggle &7- &bToggle reciving messages'
       Reload: '&7 * &e/abm reload &7- &bReload configurations'
       Footer: '&7&m-----------------------------------------'
