@@ -34,7 +34,11 @@ public final class ActionBarMessager extends JavaPlugin {
         CommandHandler commandHandler = new CommandHandler();
         this.getCommand("actionbarmessager").setExecutor(commandHandler);
         this.getCommand("actionbarmessager").setTabCompleter(commandHandler);
-        new Metrics(this, 14275);
+        try {
+            new Metrics(this, 14275);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Override
