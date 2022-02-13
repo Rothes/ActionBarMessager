@@ -70,6 +70,7 @@ public final class MessageManager implements Listener {
                     if (read == null) {
                         user.setLastOtherActionBar(System.currentTimeMillis());
                         user.setCache(null);
+                        return;
                     }
                     String json = read.getJson();
                     String replaced = json.replace(VERIFICATION, "");
