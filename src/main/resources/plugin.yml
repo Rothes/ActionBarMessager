@@ -2,6 +2,7 @@ name: ActionBarMessager
 main: io.github.rothes.actionbarmessager.bukkit.ActionBarMessager
 version: ${projectVersionString}
 author: Rothes
+api-version: 1.13
 depend:
   - ProtocolLib
   - PlaceholderAPI
