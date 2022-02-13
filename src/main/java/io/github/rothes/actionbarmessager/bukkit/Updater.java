@@ -17,7 +17,7 @@ import java.util.Map;
 public final class Updater {
 
     private final String VERSION_CHANNCEL = "Stable";
-    private final int VERSION_NUMBER = 1;
+    private final int VERSION_NUMBER = 2;
     private final HashMap<String, Integer> msgTimesMap = new HashMap<>();
 
     public void start() {
@@ -32,7 +32,9 @@ public final class Updater {
 
     private String getJson() {
         try (
-                InputStream stream = new URL("https://raw.fastgit.org/Rothes/ActionBarMessager/master/Version%20Infos.json")
+                InputStream stream = new URL(I18nHelper.getLocale().equals("zh-CN") ?
+                        "https://raw.fastgit.org/Rothes/ActionBarMessager/master/Version%20Infos.json" :
+                        "https://raw.githubusercontent.com/Rothes/ActionBarMessager/master/Version%20Infos.json")
                         .openStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
         ){

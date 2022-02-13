@@ -33,49 +33,55 @@ public final class MessageManager implements Listener {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
-            if (Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1]) >= 17) {
-                ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.SET_ACTION_BAR_TEXT) {
-                    public void onPacketSending(PacketEvent e) {
-                        User user = getEventUser(e);
-                        if (user == null) return;
-                        user.setLastOtherActionBar(System.currentTimeMillis());
-                        user.setCache("");
-                    }
-                });
+        if (Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1]) >= 17) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.SET_ACTION_BAR_TEXT) {
+                public void onPacketSending(PacketEvent e) {
+                    User user = getEventUser(e);
+                    if (user == null) return;
+                    user.setLastOtherActionBar(System.currentTimeMillis());
+                    user.setCache(null);
+                }
+            });
 
-            } else {
-                ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.TITLE) {
-                    @Override
-                    public void onPacketSending(PacketEvent e) {
-                        User user = getEventUser(e);
-                        if (user == null) return;
-                        PacketContainer packet = e.getPacket();
-                        if (packet.getTitleActions().read(0) == EnumWrappers.TitleAction.ACTIONBAR) {
-                            user.setLastOtherActionBar(System.currentTimeMillis());
-                            user.setCache("");
-                        }
-                    }
-                });
-            }
-
-            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.LOWEST, PacketType.Play.Server.CHAT) {
+        } else {
+            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.TITLE) {
                 @Override
                 public void onPacketSending(PacketEvent e) {
                     User user = getEventUser(e);
+                    if (user == null) return;
                     PacketContainer packet = e.getPacket();
-                    if (packet.getChatTypes().read(0) == EnumWrappers.ChatType.GAME_INFO
-                            || (packet.getBytes().size() >= 1 && packet.getBytes().read(0) == 2)) {
-                            String json = packet.getChatComponents().read(0).getJson();
-                            String replaced = json.replace(VERIFICATION, "");
-                            if (json.equals(replaced)) {
-                                user.setLastOtherActionBar(System.currentTimeMillis());
-                            } else {
-                                packet.getChatComponents().write(0, WrappedChatComponent.fromJson(replaced));
-                                user.setCache("");
-                            }
+                    if (packet.getTitleActions().read(0) == EnumWrappers.TitleAction.ACTIONBAR) {
+                        user.setLastOtherActionBar(System.currentTimeMillis());
+                        user.setCache(null);
                     }
                 }
             });
+        }
+
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.LOWEST, PacketType.Play.Server.CHAT) {
+            @Override
+            public void onPacketSending(PacketEvent e) {
+                User user = getEventUser(e);
+                PacketContainer packet = e.getPacket();
+                if (packet.getChatTypes().read(0) == EnumWrappers.ChatType.GAME_INFO
+                        || (packet.getBytes().size() >= 1 && packet.getBytes().read(0) == 2)) {
+                    WrappedChatComponent read = packet.getChatComponents().read(0);
+                    // If null, must not be messages from ActionBarMessager.
+                    if (read == null) {
+                        user.setLastOtherActionBar(System.currentTimeMillis());
+                        user.setCache(null);
+                    }
+                    String json = read.getJson();
+                    String replaced = json.replace(VERIFICATION, "");
+                    if (json.equals(replaced)) {
+                        user.setLastOtherActionBar(System.currentTimeMillis());
+                        user.setCache(null);
+                    } else {
+                        packet.getChatComponents().write(0, WrappedChatComponent.fromJson(replaced));
+                    }
+                }
+            }
+        });
 
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
