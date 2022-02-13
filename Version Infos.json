@@ -1,10 +1,10 @@
 {
   "Version_Channels": {
     "Stable": {
-      "Latest_Version_Number": 2,
+      "Latest_Version_Number": 3,
       "Message": {
-        "en-US": "§bA new version (\"1.1.0\") is available!\n§bDownload here: https://www.spigotmc.org/resources/actionbarmessager-1-8-1-18.99939/",
-        "zh-CN": "§b插件有新版本 (\"1.1.0\") 了!\n§b请更新您的插件: https://www.spigotmc.org/resources/actionbarmessager-1-8-1-18.99939/"
+        "en-US": "§bA new version (\"1.1.1\") is available!\n§bDownload here: https://www.spigotmc.org/resources/actionbarmessager-1-8-1-18.99939/",
+        "zh-CN": "§b插件有新版本 (\"1.1.1\") 了!\n§b请更新您的插件: https://www.spigotmc.org/resources/actionbarmessager-1-8-1-18.99939/"
       }
     }
   },
