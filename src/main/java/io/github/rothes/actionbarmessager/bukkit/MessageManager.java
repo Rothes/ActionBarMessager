@@ -165,7 +165,7 @@ public final class MessageManager implements Listener {
 
     private User getEventUser(@Nonnull PacketEvent packetEvent) {
         Player player = packetEvent.getPlayer();
-        return player instanceof TemporaryPlayer ? null : plugin.getUserManager().getUser(player);
+        return player instanceof Player ? plugin.getUserManager().getUser(player) : null;
     }
 
     @EventHandler
