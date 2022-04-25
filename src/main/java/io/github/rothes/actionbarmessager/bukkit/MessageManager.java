@@ -7,7 +7,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import io.github.rothes.actionbarmessager.bukkit.user.User;
@@ -62,6 +61,7 @@ public final class MessageManager implements Listener {
             @Override
             public void onPacketSending(PacketEvent e) {
                 User user = getEventUser(e);
+                if (user == null) return;
                 PacketContainer packet = e.getPacket();
                 if (packet.getChatTypes().read(0) == EnumWrappers.ChatType.GAME_INFO
                         || (packet.getBytes().size() >= 1 && packet.getBytes().read(0) == 2)) {
@@ -88,7 +88,7 @@ public final class MessageManager implements Listener {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 User user = plugin.getUserManager().getUser(player);
-                if (!user.isReceiveMessages()) return;
+                if (user == null || !user.isReceiveMessages()) return;
 
                 boolean send = true;
                 user.setCurrentInterval(user.getCurrentInterval() + 1);
@@ -118,13 +118,11 @@ public final class MessageManager implements Listener {
                                     plugin.getConfigManager().compromise ? toSend + VERIFICATION : toSend);
                             break;
                         case JSON:
-                            WrappedChatComponent component1 = WrappedChatComponent.fromJson(toSend);
+                            component = WrappedChatComponent.fromJson(toSend);
                             if (plugin.getConfigManager().compromise)
                                 component = WrappedChatComponent.fromJson(
-                                        COMPILE.matcher(component1.getJson()).replaceFirst("\"text\":\"" + VERIFICATION)
+                                        COMPILE.matcher(component.getJson()).replaceFirst("\"text\":\"" + VERIFICATION)
                                 );
-                            else
-                                component = component1;
                             break;
                         default:
                             throw new AssertionError();
@@ -147,7 +145,8 @@ public final class MessageManager implements Listener {
                             i = 0;
                         }
 
-                        if (getMessages()[i].getPermission() == null || player.hasPermission(getMessages()[i].getPermission())) {
+                        if ((getMessages()[i].getPermission() == null || getMessages()[i].getPermission().isEmpty())
+                                || player.hasPermission(getMessages()[i].getPermission())) {
                             user.setCurrentIndex(i);
                             break;
                         }
