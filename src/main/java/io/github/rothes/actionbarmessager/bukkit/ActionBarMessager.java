@@ -2,7 +2,7 @@ package io.github.rothes.actionbarmessager.bukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import io.github.rothes.actionbarmessager.bukkit.user.UserManager;
-import me.clip.placeholderapi.metrics.bukkit.Metrics;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,11 +34,7 @@ public final class ActionBarMessager extends JavaPlugin {
         CommandHandler commandHandler = new CommandHandler();
         this.getCommand("actionbarmessager").setExecutor(commandHandler);
         this.getCommand("actionbarmessager").setTabCompleter(commandHandler);
-        try {
-            new Metrics(this, 14275);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        new Metrics(this, 14275);
     }
 
     @Override
