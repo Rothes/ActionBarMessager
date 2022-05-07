@@ -24,8 +24,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.10.10")
+    compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.1")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
 
     implementation("org.bstats:bstats-bukkit:3.0.0")
@@ -60,4 +60,8 @@ test {
 
 gradle.buildFinished {
     new File(project.buildDir, "resources/").deleteDir()
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
