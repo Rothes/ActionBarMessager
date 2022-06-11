@@ -1,6 +1,6 @@
 # ActionBarMessager
 
-A plugin for Spigot 1.8 - 1.18 that sends ActionBar messages to players.
+A plugin for Spigot 1.8 - 1.19 that sends ActionBar messages to players.
 
 ## Related Links
 
