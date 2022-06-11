@@ -35,13 +35,32 @@ public final class MessageManager implements Listener {
             .build();
 
     private static final int SHOWING_INTERAL_KEEP = 2000;
+    private final short SERVER_VERSION = Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1]);
     private ActionBarMessager plugin;
 
     void start(ActionBarMessager plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
-        if (Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1]) >= 17) {
+        if (SERVER_VERSION >= 19) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.SYSTEM_CHAT) {
+                public void onPacketSending(PacketEvent e) {
+                    User user = getEventUser(e);
+                    if (user == null) return;
+                    PacketContainer packet = e.getPacket();
+                    if (weakCache.asMap().containsKey(packet)) {
+                        weakCache.invalidate(packet);
+                        return;
+                    }
+                    if (packet.getIntegers().read(0) == EnumWrappers.ChatType.GAME_INFO.getId()) {
+                        user.setLastOtherActionBar(System.currentTimeMillis());
+                        user.setCache(null);
+                    }
+                }
+            });
+        }
+
+        if (SERVER_VERSION >= 17) {
             ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, ListenerPriority.MONITOR, PacketType.Play.Server.SET_ACTION_BAR_TEXT) {
                 public void onPacketSending(PacketEvent e) {
                     User user = getEventUser(e);
@@ -85,7 +104,6 @@ public final class MessageManager implements Listener {
                         user.setCache(null);
                         return;
                     }
-                    String json = read.getJson();
                     user.setLastOtherActionBar(System.currentTimeMillis());
                     user.setCache(null);
                 }
@@ -115,11 +133,6 @@ public final class MessageManager implements Listener {
 
                 if (send) {
                     ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-                    PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
-                    weakCache.put(packet, null);
-                    packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
-                    if (packet.getBytes().size() == 1)
-                        packet.getBytes().write(0, (byte) 2);
                     WrappedChatComponent component;
                     switch (message.getType()) {
                         case PLAIN:
@@ -131,6 +144,17 @@ public final class MessageManager implements Listener {
                         default:
                             throw new AssertionError();
                     }
+                    PacketContainer packet;
+                    if (SERVER_VERSION >= 19) {
+                        packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
+                        packet.getIntegers().write(0, (int) EnumWrappers.ChatType.GAME_INFO.getId());
+                    } else {
+                        packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
+                        packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
+                        if (packet.getBytes().size() == 1)
+                            packet.getBytes().write(0, (byte) 2);
+                    }
+                    weakCache.put(packet, null);
                     packet.getChatComponents().write(0, component);
                     protocolManager.sendServerPacket(player, packet);
                     user.setCache(toSend);
