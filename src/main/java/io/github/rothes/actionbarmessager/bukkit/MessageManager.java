@@ -9,6 +9,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.github.rothes.actionbarmessager.bukkit.user.User;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -18,14 +20,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import javax.annotation.Nonnull;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public final class MessageManager implements Listener {
 
+    private final Cache<Object, Object> weakCache = CacheBuilder
+            .newBuilder()
+            .expireAfterAccess(1, TimeUnit.MINUTES)
+            .build();
+
     private static final int SHOWING_INTERAL_KEEP = 2000;
-    private static final String VERIFICATION = "FROM嗄 - 醃ABM錒";
-    private static final Pattern COMPILE = Pattern.compile("\"text\":\"");
     private ActionBarMessager plugin;
 
     void start(ActionBarMessager plugin) {
@@ -63,6 +72,10 @@ public final class MessageManager implements Listener {
                 User user = getEventUser(e);
                 if (user == null) return;
                 PacketContainer packet = e.getPacket();
+                if (weakCache.asMap().containsKey(packet)) {
+                    weakCache.invalidate(packet);
+                    return;
+                }
                 if (packet.getChatTypes().read(0) == EnumWrappers.ChatType.GAME_INFO
                         || (packet.getBytes().size() >= 1 && packet.getBytes().read(0) == 2)) {
                     WrappedChatComponent read = packet.getChatComponents().read(0);
@@ -73,13 +86,8 @@ public final class MessageManager implements Listener {
                         return;
                     }
                     String json = read.getJson();
-                    String replaced = json.replace(VERIFICATION, "");
-                    if (json.equals(replaced)) {
-                        user.setLastOtherActionBar(System.currentTimeMillis());
-                        user.setCache(null);
-                    } else {
-                        packet.getChatComponents().write(0, WrappedChatComponent.fromJson(replaced));
-                    }
+                    user.setLastOtherActionBar(System.currentTimeMillis());
+                    user.setCache(null);
                 }
             }
         });
@@ -108,31 +116,23 @@ public final class MessageManager implements Listener {
                 if (send) {
                     ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
                     PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
+                    weakCache.put(packet, null);
                     packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
                     if (packet.getBytes().size() == 1)
                         packet.getBytes().write(0, (byte) 2);
                     WrappedChatComponent component;
                     switch (message.getType()) {
                         case PLAIN:
-                            component = WrappedChatComponent.fromLegacyText(
-                                    plugin.getConfigManager().compromise ? toSend + VERIFICATION : toSend);
+                            component = WrappedChatComponent.fromLegacyText(toSend);
                             break;
                         case JSON:
                             component = WrappedChatComponent.fromJson(toSend);
-                            if (plugin.getConfigManager().compromise)
-                                component = WrappedChatComponent.fromJson(
-                                        COMPILE.matcher(component.getJson()).replaceFirst("\"text\":\"" + VERIFICATION)
-                                );
                             break;
                         default:
                             throw new AssertionError();
                     }
                     packet.getChatComponents().write(0, component);
-                    try {
-                        protocolManager.sendServerPacket(player, packet);
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                    protocolManager.sendServerPacket(player, packet);
                     user.setCache(toSend);
                     user.setCacheTime(System.currentTimeMillis());
                 }
