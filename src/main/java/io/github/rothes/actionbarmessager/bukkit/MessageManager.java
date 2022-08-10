@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import io.github.rothes.actionbarmessager.bukkit.user.User;
@@ -38,7 +39,13 @@ public final class MessageManager implements Listener {
                     if (packet.getMeta("abm_filtered_packet").isPresent()) {
                         return;
                     }
-                    if (packet.getIntegers().read(0) == EnumWrappers.ChatType.GAME_INFO.getId()) {
+                    StructureModifier<Integer> integers = packet.getIntegers();
+                    if (integers.size() == 1) {
+                        if (integers.read(0) == EnumWrappers.ChatType.GAME_INFO.getId()) {
+                            user.setLastOtherActionBar(System.currentTimeMillis());
+                            user.setCache(null);
+                        }
+                    } else if (packet.getBooleans().read(0)){
                         user.setLastOtherActionBar(System.currentTimeMillis());
                         user.setCache(null);
                     }
@@ -133,7 +140,12 @@ public final class MessageManager implements Listener {
                         PacketContainer packet;
                         if (SERVER_VERSION >= 19) {
                             packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
-                            packet.getIntegers().write(0, (int) EnumWrappers.ChatType.GAME_INFO.getId());
+                            StructureModifier<Integer> integers = packet.getIntegers();
+                            if (integers.size() == 1) {
+                                integers.write(0, (int) EnumWrappers.ChatType.GAME_INFO.getId());
+                            } else {
+                                packet.getBooleans().write(0, true);
+                            }
                             packet.getStrings().write(0, component.getJson());
                         } else {
                             packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
