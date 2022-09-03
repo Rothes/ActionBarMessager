@@ -107,7 +107,7 @@ public final class MessageManager implements Listener {
             try {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     User user = plugin.getUserManager().getUser(player);
-                    if (user == null || !user.isReceiveMessages()) return;
+                    if (user == null || !user.isReceiveMessages()) continue;
 
                     boolean send = true;
                     user.setCurrentInterval(user.getCurrentInterval() + 1);
@@ -116,7 +116,7 @@ public final class MessageManager implements Listener {
                         send = false;
                     AbmMessage message = getMessages()[user.getCurrentIndex()];
 
-                    if (message.getInterval() > user.getCurrentInterval()) return;
+                    if (message.getInterval() > user.getCurrentInterval()) continue;
 
                     String toSend = PlaceholderAPI.setPlaceholders(player, message.getMessage());
                     String cache = user.getCache();
