@@ -22,7 +22,7 @@ public final class I18n {
     private static String systemLocale = null;
     private static String locale = null;
     private static HashMap<String, String> localedMessages = null;
-    private static String[] replaceHolders = new String[10];
+    private static final String[] replaceHolders = new String[10];
 
     public static void init(@Nonnull ActionBarMessager plugin) {
         I18n.plugin = plugin;
@@ -76,6 +76,7 @@ public final class I18n {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(resource, StandardCharsets.UTF_8));
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void loadLocale() {
         File localeFile = new File(plugin.getDataFolder() + "/Locale/" + locale + ".yml");
         YamlConfiguration locale;
@@ -93,6 +94,7 @@ public final class I18n {
             }
         }
         for (String key : locale.getKeys(true)) {
+            //noinspection ConstantConditions // translateAlternateColorCodes will do the check.
             localedMessages.put(key, ChatColor.translateAlternateColorCodes('&', locale.getString(key)));
         }
     }
