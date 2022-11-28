@@ -5,7 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
-public class Listeners implements Listener {
+public final class Listeners implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
