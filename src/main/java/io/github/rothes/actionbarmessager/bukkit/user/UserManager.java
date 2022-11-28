@@ -26,12 +26,7 @@ public final class UserManager {
 
     public void reload() {
         for (User user : userMap.values()) {
-            user.setLastOtherActionBar(0);
-            user.setCache(null);
-            user.setCacheTime(0);
-            user.setCurrentIndex(0);
-            user.setCurrentTimes(0);
-            user.setCurrentInterval(0);
+            user.resetMessage();
         }
 
     }

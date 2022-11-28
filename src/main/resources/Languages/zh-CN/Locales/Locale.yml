@@ -1,7 +1,9 @@
 Console-Sender:
   Messages:
     Initialize:
-      Invalid-Type: '&c无效的消息类型: %0% , 使用默认值 ''Plain'''
+      Upgrading-Config: '正在备份并升级配置文件 (%0% -> %1%).'
+      Invalid-Type: '&c无效的消息类型: %0% , 使用默认值 ''Text'''
+      Duplicate-World-Messages: '&c世界名 "%0%" 在组 "%1%" 中再次出现, 覆写中.'
     Updater:
       Invalid-Channel: '§c您使用的插件处于一个未知的版本通道("%0%"). 请尝试更新您的插件到最新版本.'
 Sender:

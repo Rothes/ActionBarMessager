@@ -1,7 +1,9 @@
 Console-Sender:
   Messages:
     Initialize:
-      Invalid-Type: '&cInvalid type: %0% , using defaults ''Plain'''
+      Upgrading-Config: 'Backing up and upgrading configs (%0% -> %1%).'
+      Invalid-Type: '&cInvalid type: %0% , using defaults ''Text'''
+      Duplicate-World-Messages: '&cWorld "%0%" has duplicate appeared in group "%1%", overriding.'
     Updater:
       Invalid-Channel: '§cABM is in a invalid channel ("%0%"). Please update your plugin to the latest version.'
 Sender:

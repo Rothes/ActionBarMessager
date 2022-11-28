@@ -1,6 +1,9 @@
 package io.github.rothes.actionbarmessager.bukkit.user;
 
 import io.github.rothes.actionbarmessager.bukkit.ActionBarMessager;
+import io.github.rothes.actionbarmessager.bukkit.ConfigManager;
+import io.github.rothes.actionbarmessager.bukkit.MessageEntry;
+import me.clip.placeholderapi.libs.kyori.adventure.platform.facet.Facet;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -15,12 +18,14 @@ public final class User {
     private long lastOtherActionBar;
     private String cache;
     private long cacheTime;
+    private MessageEntry[] currentMessages;
     private int currentIndex;
     private long currentTimes;
     private long currentInterval;
 
     User(Player player) {
         this.player = player;
+        updateWorldMessages();
         File file = new File(ActionBarMessager.getInstance().getDataFolder(), "Datas/Players/" + player.getUniqueId() + "/Data.yml");
         try {
             if (!file.exists()) {
@@ -79,6 +84,23 @@ public final class User {
         return cacheTime;
     }
 
+    public void updateWorldMessages() {
+        ConfigManager configManager = ActionBarMessager.getInstance().getConfigManager();
+        MessageEntry[] now = configManager.messages.getOrDefault(player.getWorld().getName(), configManager.defaultMessages);
+        if (now != getCurrentMessages()) {
+            setCurrentMessages(now);
+            resetMessage();
+        }
+    }
+
+    public MessageEntry[] getCurrentMessages() {
+        return currentMessages;
+    }
+
+    public void setCurrentMessages(MessageEntry[] currentMessages) {
+        this.currentMessages = currentMessages;
+    }
+
     public void setCurrentIndex(int currentIndex) {
         this.currentIndex = currentIndex;
     }
@@ -101,6 +123,15 @@ public final class User {
 
     public long getCurrentInterval() {
         return currentInterval;
+    }
+
+    public void resetMessage() {
+        setLastOtherActionBar(0);
+        setCache(null);
+        setCacheTime(0);
+        setCurrentIndex(0);
+        setCurrentTimes(0);
+        setCurrentInterval(0);
     }
 
 }

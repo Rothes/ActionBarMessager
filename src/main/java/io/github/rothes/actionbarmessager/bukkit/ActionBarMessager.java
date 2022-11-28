@@ -31,6 +31,8 @@ public final class ActionBarMessager extends JavaPlugin {
         messageManager = new MessageManager();
         messageManager.start(this);
 
+        Bukkit.getPluginManager().registerEvents(new Listeners(), this);
+
         CommandHandler commandHandler = new CommandHandler();
         this.getCommand("actionbarmessager").setExecutor(commandHandler);
         this.getCommand("actionbarmessager").setTabCompleter(commandHandler);

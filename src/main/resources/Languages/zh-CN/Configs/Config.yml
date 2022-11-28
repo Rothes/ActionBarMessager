@@ -6,20 +6,41 @@ Options:
     Enable: true
     # 等待多少毫秒后重新开始发送消息. 2000ms 为开始淡化的时间, 3000ms 为淡化完毕的时间.
     Interval: 3100
-  # ActionBar 消息列表.
-  Messages:
-    - Type: Plain  # 文本类型.
-      Message: '&e你好, %player_displayname%!'  # 显示的文本.
-      Permission: ''  # 需要的权限. 留空或不填为忽略.
-      Times: 40  # 这条消息发送多少次后发送下条消息.
-      Interval: 1  # 每隔多少 tick 发送一次.
-    - Type: Plain
-      Message: '&6欢迎来到我的服务器!'
-      Permission: ''
-      Times: 40
-      Interval: 1
-    - Type: Json
-      Message: '{"text":"这是一条 Json 消息! 您正在使用 ", "extra":[{"translate":"language.name", "color":"dark_aqua", "bold":true}, {"text":" 游玩我的世界!"}]}'
-      Permission: ''
-      Times: 20
-      Interval: 2
+  # ActionBar 消息组.
+  Groups:
+    # 一个消息组. 您可以定义更多. 我们可以接受任何组名, 您只需要确保组名是独一无二的.
+    Group1:
+      # 此组的消息列表.
+      Messages:
+        - Type: Text  # 文本类型.
+          Message: '&e你正处于下界! 不要在熔岩里面游泳!'  # 显示的文本.
+          Permission: ''  # 需要的权限. 留空或不填为忽略.
+          Times: 40  # 这条消息发送多少次后发送下条消息.
+          Interval: 1  # 每隔多少 tick 发送一次.
+      # 定义此组用于的世界. 大小写敏感.
+      Worlds:
+        - world_nether
+        - world_nether_2
+    # 默认组.
+    Default:
+      Messages:
+        - Type: Text  # 文本类型.
+          Message: '&e你好, %player_displayname%!'  # 显示的文本.
+          Permission: ''  # 需要的权限. 留空或不填为忽略.
+          Times: 40  # 这条消息发送多少次后发送下条消息.
+          Interval: 1  # 每隔多少 tick 发送一次.
+        - Type: Text
+          Message: '&6欢迎来到我的服务器!'
+          Permission: ''
+          Times: 40
+          Interval: 1
+        - Type: Json
+          Message: '{"text":"这是一条 Json 消息! 您正在使用 ", "extra":[{"translate":"language.name", "color":"dark_aqua", "bold":true}, {"text":" 游玩我的世界!"}]}'
+          Permission: ''
+          Times: 20
+          Interval: 2
+      Worlds:
+        - 此组 Default 用于任何没有在
+        - 其它组中定义的世界.
+        - 编辑 Default 组的世界没有任何用处.
+        - 您可以直接删掉这里的 Worlds 列表.

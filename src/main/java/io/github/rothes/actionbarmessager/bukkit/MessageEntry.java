@@ -5,10 +5,10 @@ import org.bukkit.ChatColor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class AbmMessage {
+public final class MessageEntry {
 
     public enum Type {
-        PLAIN,
+        TEXT,
         JSON
     }
 
@@ -18,9 +18,9 @@ public final class AbmMessage {
     private final long times;
     private final long interval;
 
-    public AbmMessage(@Nonnull Type type, @Nonnull String message, @Nullable String permission, long times, long interval) {
+    public MessageEntry(@Nonnull Type type, @Nonnull String message, @Nullable String permission, long times, long interval) {
         this.type = type;
-        this.message = ChatColor.translateAlternateColorCodes('&', message);
+        this.message = type == Type.TEXT ? ChatColor.translateAlternateColorCodes('&', message) : message;
         this.permission = permission;
         this.times = times;
         this.interval = interval;
@@ -51,7 +51,7 @@ public final class AbmMessage {
 
     @Override
     public String toString() {
-        return "AbmMessage{" +
+        return "MessageEntry{" +
                 "type=" + type +
                 ", message='" + message + '\'' +
                 ", permission='" + permission + '\'' +

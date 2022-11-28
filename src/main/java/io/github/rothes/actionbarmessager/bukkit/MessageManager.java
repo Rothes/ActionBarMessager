@@ -114,7 +114,7 @@ public final class MessageManager implements Listener {
                     if (plugin.getConfigManager().compromise
                             && System.currentTimeMillis() - user.getLastOtherActionBar() <= plugin.getConfigManager().compromiseInterval)
                         send = false;
-                    AbmMessage message = getMessages()[user.getCurrentIndex()];
+                    MessageEntry message = user.getCurrentMessages()[user.getCurrentIndex()];
 
                     if (message.getInterval() > user.getCurrentInterval()) continue;
 
@@ -128,7 +128,7 @@ public final class MessageManager implements Listener {
                         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
                         WrappedChatComponent component;
                         switch (message.getType()) {
-                            case PLAIN:
+                            case TEXT:
                                 component = WrappedChatComponent.fromLegacyText(toSend);
                                 break;
                             case JSON:
@@ -161,15 +161,15 @@ public final class MessageManager implements Listener {
                     }
 
                     if (user.getCurrentTimes() == message.getTimes() - 1) {
-                        int length = getMessages().length;
+                        int length = user.getCurrentMessages().length;
                         int i = user.getCurrentIndex();
                         for (int i1 = 0; i1 < length; i1++) {
                             if (++i >= length) {
                                 i = 0;
                             }
 
-                            if ((getMessages()[i].getPermission() == null || getMessages()[i].getPermission().isEmpty())
-                                    || player.hasPermission(getMessages()[i].getPermission())) {
+                            if ((user.getCurrentMessages()[i].getPermission() == null || user.getCurrentMessages()[i].getPermission().isEmpty())
+                                    || player.hasPermission(user.getCurrentMessages()[i].getPermission())) {
                                 user.setCurrentIndex(i);
                                 break;
                             }
@@ -198,7 +198,4 @@ public final class MessageManager implements Listener {
         plugin.getUserManager().removeUser(e.getPlayer());
     }
 
-    private AbmMessage[] getMessages() {
-        return plugin.getConfigManager().messages;
-    }
 }
