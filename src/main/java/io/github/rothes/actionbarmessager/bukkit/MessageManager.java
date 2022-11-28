@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 public final class MessageManager implements Listener {
 
-    private static final int SHOWING_INTERAL_KEEP = 2000;
+    private static final int SHOWING_INTERNAL_KEEP = 2000;
     private final short SERVER_VERSION = Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1].split("-")[0]);
     private ActionBarMessager plugin;
 
@@ -120,7 +120,7 @@ public final class MessageManager implements Listener {
 
                     String toSend = PlaceholderAPI.setPlaceholders(player, message.getMessage());
                     String cache = user.getCache();
-                    if (cache != null && cache.equals(toSend) && System.currentTimeMillis() - user.getCacheTime() < SHOWING_INTERAL_KEEP) {
+                    if (cache != null && cache.equals(toSend) && System.currentTimeMillis() - user.getCacheTime() < SHOWING_INTERNAL_KEEP) {
                         send = false;
                     }
 
