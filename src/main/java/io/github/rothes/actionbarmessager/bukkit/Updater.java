@@ -32,7 +32,7 @@ public final class Updater {
 
     private String getJson() {
         try (
-                InputStream stream = new URL(I18nHelper.getLocale().equals("zh-CN") ?
+                InputStream stream = new URL(I18n.getLocale().equals("zh-CN") ?
                         "https://raw.fastgit.org/Rothes/ActionBarMessager/master/Version%20Infos.json" :
                         "https://raw.githubusercontent.com/Rothes/ActionBarMessager/master/Version%20Infos.json")
                         .openStream();
@@ -60,7 +60,7 @@ public final class Updater {
                 sendJsonMessage(channel, "updater");
             }
         } else {
-            ActionBarMessager.warn(I18nHelper.getLocaledMessage("Console-Sender.Messages.Updater.Invalid-Channel", VERSION_CHANNCEL));
+            ActionBarMessager.warn(I18n.getLocaledMessage("Console-Sender.Messages.Updater.Invalid-Channel", VERSION_CHANNCEL));
         }
 
         for (Map.Entry<String, JsonElement> entry : root.getAsJsonObject("Version_Actions").entrySet()) {

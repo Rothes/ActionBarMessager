@@ -23,7 +23,7 @@ public final class ActionBarMessager extends JavaPlugin {
     public void onEnable() {
         instance = this;
         config = YamlConfiguration.loadConfiguration(new File(instance.getDataFolder() + "/Config.yml"));
-        I18nHelper.init(this);
+        I18n.init(this);
         saveDefaultConfig();
         configManager = new ConfigManager(this);
         new Updater().start();
@@ -50,7 +50,7 @@ public final class ActionBarMessager extends JavaPlugin {
     @Override
     public void saveDefaultConfig() {
         if (!new File(getDataFolder(), "Config.yml").exists()) {
-            config = I18nHelper.getDefaultLocaledConfig();
+            config = I18n.getDefaultLocaledConfig();
             try {
                 config.save(new File(getDataFolder(), "Config.yml"));
             } catch (IOException e) {

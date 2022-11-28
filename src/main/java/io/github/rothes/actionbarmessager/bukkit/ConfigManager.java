@@ -42,7 +42,7 @@ public final class ConfigManager {
                     }
                 }
                 if (type == null) {
-                    ActionBarMessager.warn(I18nHelper.getLocaledMessage("Console-Sender.Messages.Initialize.Invalid-Type"));
+                    ActionBarMessager.warn(I18n.getLocaledMessage("Console-Sender.Messages.Initialize.Invalid-Type"));
                     type = MessageEntry.Type.TEXT;
                 }
 
@@ -61,7 +61,7 @@ public final class ConfigManager {
                 for (String world : section.getStringList("Worlds")) {
                     MessageEntry[] put = messages.put(world, msg);
                     if (put != null) {
-                        ActionBarMessager.warn(I18nHelper.getLocaledMessage("Console-Sender.Messages.Initialize.Duplicate-World-Messages", world, group));
+                        ActionBarMessager.warn(I18n.getLocaledMessage("Console-Sender.Messages.Initialize.Duplicate-World-Messages", world, group));
                     }
                 }
 
@@ -80,7 +80,7 @@ public final class ConfigManager {
         YamlConfiguration config = plugin.getConfig();
         int version = config.getInt("Config-Version", 1);
         if (version == 1) {
-            ActionBarMessager.info(I18nHelper.getLocaledMessage("Console-Sender.Messages.Initialize.Upgrading-Config", "v1", "v2"));
+            ActionBarMessager.info(I18n.getLocaledMessage("Console-Sender.Messages.Initialize.Upgrading-Config", "v1", "v2"));
             File file = new File(plugin.getDataFolder(), "Config.yml.backup");
             try {
                 file.createNewFile();
@@ -101,7 +101,7 @@ public final class ConfigManager {
             config.set("Options.Messages", null);
 
             config.set("Options.Groups.Default.Messages", msg);
-            config.set("Options.Groups.Default.Worlds", I18nHelper.getDefaultLocaledConfig().getStringList("Options.Groups.Default.Messages"));
+            config.set("Options.Groups.Default.Worlds", I18n.getDefaultLocaledConfig().getStringList("Options.Groups.Default.Messages"));
             try {
                 config.save(new File(plugin.getDataFolder(), "Config.yml"));
             } catch (IOException e) {

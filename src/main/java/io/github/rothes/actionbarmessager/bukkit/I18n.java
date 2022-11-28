@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
-public final class I18nHelper {
+public final class I18n {
 
     private static ActionBarMessager plugin;
     private static String systemLocale = null;
@@ -25,7 +25,7 @@ public final class I18nHelper {
     private static String[] replaceHolders = new String[10];
 
     public static void init(@Nonnull ActionBarMessager plugin) {
-        I18nHelper.plugin = plugin;
+        I18n.plugin = plugin;
 
         systemLocale = System.getProperty("user.language", Locale.getDefault().getLanguage());
         systemLocale += '-';
