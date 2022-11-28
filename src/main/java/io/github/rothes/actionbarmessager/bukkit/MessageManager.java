@@ -188,6 +188,10 @@ public final class MessageManager implements Listener {
         }, 0L, 1L);
     }
 
+    void stop() {
+        ProtocolLibrary.getProtocolManager().removePacketListeners(plugin);
+    }
+
     private User getEventUser(@Nonnull PacketEvent packetEvent) {
         Player player = packetEvent.getPlayer();
         return player instanceof Player ? plugin.getUserManager().getUser(player) : null;

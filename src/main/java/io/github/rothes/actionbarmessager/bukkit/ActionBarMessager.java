@@ -1,9 +1,9 @@
 package io.github.rothes.actionbarmessager.bukkit;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import io.github.rothes.actionbarmessager.bukkit.user.UserManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,15 +34,16 @@ public final class ActionBarMessager extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Listeners(), this);
 
         CommandHandler commandHandler = new CommandHandler();
-        this.getCommand("actionbarmessager").setExecutor(commandHandler);
-        this.getCommand("actionbarmessager").setTabCompleter(commandHandler);
+        PluginCommand command = this.getCommand("actionbarmessager");
+        //noinspection ConstantConditions
+        command.setExecutor(commandHandler);
+        command.setTabCompleter(commandHandler);
         new Metrics(this, 14275);
     }
 
     @Override
     public void onDisable() {
-        ProtocolLibrary.getProtocolManager().removePacketListeners(this);
-        Bukkit.getScheduler().cancelTasks(this);
+        messageManager.stop();
         userManager.saveAllData();
     }
 
