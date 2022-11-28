@@ -1,9 +1,8 @@
 package io.github.rothes.actionbarmessager.bukkit;
 
 import org.bukkit.ChatColor;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class MessageEntry {
 
@@ -12,13 +11,13 @@ public final class MessageEntry {
         JSON
     }
 
-    @Nonnull private final Type type;
-    @Nonnull private final String message;
+    @NotNull private final Type type;
+    @NotNull private final String message;
     @Nullable private final String permission;
     private final long times;
     private final long interval;
 
-    public MessageEntry(@Nonnull Type type, @Nonnull String message, @Nullable String permission, long times, long interval) {
+    public MessageEntry(@NotNull Type type, @NotNull String message, @Nullable String permission, long times, long interval) {
         this.type = type;
         this.message = type == Type.TEXT ? ChatColor.translateAlternateColorCodes('&', message) : message;
         this.permission = permission;
@@ -26,12 +25,12 @@ public final class MessageEntry {
         this.interval = interval;
     }
 
-    @Nonnull
+    @NotNull
     public Type getType() {
         return type;
     }
 
-    @Nonnull
+    @NotNull
     public String getMessage() {
         return message;
     }

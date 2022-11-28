@@ -17,8 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public final class MessageManager implements Listener {
 
@@ -192,7 +191,7 @@ public final class MessageManager implements Listener {
         ProtocolLibrary.getProtocolManager().removePacketListeners(plugin);
     }
 
-    private User getEventUser(@Nonnull PacketEvent packetEvent) {
+    private User getEventUser(@NotNull PacketEvent packetEvent) {
         Player player = packetEvent.getPlayer();
         //noinspection ConstantConditions // For ProtocolLib 4 backward support.
         return player instanceof Player ? plugin.getUserManager().getUser(player) : null;

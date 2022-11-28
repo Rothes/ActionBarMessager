@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +24,7 @@ public final class I18n {
     private static HashMap<String, String> localedMessages = null;
     private static final String[] replaceHolders = new String[10];
 
-    public static void init(@Nonnull ActionBarMessager plugin) {
+    public static void init(@NotNull ActionBarMessager plugin) {
         I18n.plugin = plugin;
 
         systemLocale = System.getProperty("user.language", Locale.getDefault().getLanguage());
@@ -46,14 +46,14 @@ public final class I18n {
         return locale;
     }
 
-    @Nonnull
+    @NotNull
     public static YamlConfiguration getDefaultLocaledConfig() {
         InputStream resource = getLocaledResource("/Configs/Config.yml");
         return YamlConfiguration.loadConfiguration(new InputStreamReader(resource, StandardCharsets.UTF_8));
     }
 
-    @Nonnull
-    public static String getLocaledMessage(@Nonnull String key, @Nonnull String... replacements) {
+    @NotNull
+    public static String getLocaledMessage(@NotNull String key, @NotNull String... replacements) {
         Validate.notNull(key, "Key cannot be null");
         Validate.notNull(replacements, "Replacements Array cannot be null");
 
@@ -62,15 +62,15 @@ public final class I18n {
         return length > 0 ? StringUtils.replaceEach(result, Arrays.copyOf(replaceHolders, length), replacements) : result;
     }
 
-    @Nonnull
-    public static String getPrefixedLocaledMessage(@Nonnull String key, @Nonnull String... replacements) {
+    @NotNull
+    public static String getPrefixedLocaledMessage(@NotNull String key, @NotNull String... replacements) {
         Validate.notNull(key, "Key cannot be null");
         Validate.notNull(replacements, "Replacements Array cannot be null");
 
         return getLocaledMessage("Sender.Prefix") + getLocaledMessage(key, replacements);
     }
 
-    @Nonnull
+    @NotNull
     public static YamlConfiguration getDefaultLocale() {
         InputStream resource = getLocaledResource("/Locales/Locale.yml");
         return YamlConfiguration.loadConfiguration(new InputStreamReader(resource, StandardCharsets.UTF_8));
@@ -99,7 +99,7 @@ public final class I18n {
         }
     }
 
-    private static void checkLocaleKeys(@Nonnull File localeFile) {
+    private static void checkLocaleKeys(@NotNull File localeFile) {
         YamlConfiguration defaultLocale = getDefaultLocale();
         YamlConfiguration locale = YamlConfiguration.loadConfiguration(localeFile);
         boolean checked = false;
@@ -118,8 +118,8 @@ public final class I18n {
         }
     }
 
-    @Nonnull
-    private static InputStream getLocaledResource(@Nonnull String file) {
+    @NotNull
+    private static InputStream getLocaledResource(@NotNull String file) {
         InputStream resource = plugin.getResource("Languages/" + locale + file);
         if (resource == null) {
             resource = plugin.getResource("Languages/" + systemLocale + file);
