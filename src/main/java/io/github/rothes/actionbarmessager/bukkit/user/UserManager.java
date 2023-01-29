@@ -24,6 +24,12 @@ public final class UserManager {
         }
     }
 
+    public void updateWorldAll() {
+        for (User user : userMap.values()) {
+            user.updateWorldMessages();
+        }
+    }
+
     public void reload() {
         for (User user : userMap.values()) {
             user.resetMessage();

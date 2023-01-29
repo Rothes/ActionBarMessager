@@ -3,7 +3,6 @@ package io.github.rothes.actionbarmessager.bukkit.user;
 import io.github.rothes.actionbarmessager.bukkit.ActionBarMessager;
 import io.github.rothes.actionbarmessager.bukkit.ConfigManager;
 import io.github.rothes.actionbarmessager.bukkit.MessageEntry;
-import me.clip.placeholderapi.libs.kyori.adventure.platform.facet.Facet;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 

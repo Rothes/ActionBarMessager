@@ -1,6 +1,7 @@
 package io.github.rothes.actionbarmessager.bukkit;
 
 import io.github.rothes.actionbarmessager.bukkit.user.User;
+import io.github.rothes.actionbarmessager.bukkit.user.UserManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,6 +37,7 @@ public final class CommandHandler implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     ActionBarMessager.getInstance().reload();
+                    ActionBarMessager.getInstance().getUserManager().updateWorldAll();
                     sender.sendMessage(I18n.getPrefixedLocaledMessage("Sender.Commands.Reload.Success"));
                     return true;
                 default:
