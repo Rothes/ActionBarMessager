@@ -16,8 +16,8 @@ import java.util.Map;
 
 public final class Updater {
 
-    private final String VERSION_CHANNCEL = "Stable";
-    private final int VERSION_NUMBER = 7;
+    private static final String VERSION_CHANNEL = "Stable";
+    private static final int VERSION_NUMBER = 10;
     private final HashMap<String, Integer> msgTimesMap = new HashMap<>();
 
     public void start() {
@@ -53,14 +53,14 @@ public final class Updater {
         JsonElement element = new JsonParser().parse(json);
         JsonObject root = element.getAsJsonObject();
         JsonObject channels = root.getAsJsonObject("Version_Channels");
-        if (channels.has(VERSION_CHANNCEL)) {
-            JsonObject channel = channels.getAsJsonObject(VERSION_CHANNCEL);
+        if (channels.has(VERSION_CHANNEL)) {
+            JsonObject channel = channels.getAsJsonObject(VERSION_CHANNEL);
             if (channel.has("Message")
                     && Integer.parseInt(channel.getAsJsonPrimitive("Latest_Version_Number").getAsString()) > VERSION_NUMBER) {
                 sendJsonMessage(channel, "updater");
             }
         } else {
-            ActionBarMessager.warn(I18n.getLocaledMessage("Console-Sender.Messages.Updater.Invalid-Channel", VERSION_CHANNCEL));
+            ActionBarMessager.warn(I18n.getLocaledMessage("Console-Sender.Messages.Updater.Invalid-Channel", VERSION_CHANNEL));
         }
 
         for (Map.Entry<String, JsonElement> entry : root.getAsJsonObject("Version_Actions").entrySet()) {
