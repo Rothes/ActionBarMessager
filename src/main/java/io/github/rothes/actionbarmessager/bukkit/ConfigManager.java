@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,13 @@ public final class ConfigManager {
         FileConfiguration config = plugin.getConfig();
 
         List<MessageEntry> messageList = new ArrayList<>();
-        config.createSection("Options.Groups");
-        for (String group : config.getConfigurationSection("Options.Groups").getKeys(false)) {
+        ConfigurationSection groups = config.getConfigurationSection("Options.Groups");
+        if (groups == null) {
+            config.createSection("Options.Groups");
+            groups = config.getConfigurationSection("Options.Groups");
+        }
+        for (String group : groups.getKeys(false)) {
+            messageList.clear();
             ConfigurationSection section = config.getConfigurationSection("Options.Groups." + group);
             assert section != null;
 
@@ -47,7 +53,7 @@ public final class ConfigManager {
                 }
 
                 Object message = map.get("Message");
-                if (message == null) break;
+                if (message == null) continue;
                 String permission = map.containsKey("Permission") ? String.valueOf(map.get("Permission")) : null;
                 long interval = Long.parseLong(String.valueOf(map.getOrDefault("Interval", "1")));
                 long times = Long.parseLong(String.valueOf(map.getOrDefault("Times", "20")));
