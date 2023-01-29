@@ -108,12 +108,15 @@ public final class MessageManager implements Listener {
                     User user = plugin.getUserManager().getUser(player);
                     if (user == null || !user.isReceiveMessages()) continue;
 
+                    MessageEntry[] messages = user.getCurrentMessages();
+                    if (messages.length == 0) continue;
+
                     boolean send = true;
                     user.setCurrentInterval(user.getCurrentInterval() + 1);
                     if (plugin.getConfigManager().compromise
                             && System.currentTimeMillis() - user.getLastOtherActionBar() <= plugin.getConfigManager().compromiseInterval)
                         send = false;
-                    MessageEntry message = user.getCurrentMessages()[user.getCurrentIndex()];
+                    MessageEntry message = messages[user.getCurrentIndex()];
 
                     if (message.getInterval() > user.getCurrentInterval()) continue;
 
@@ -160,15 +163,16 @@ public final class MessageManager implements Listener {
                     }
 
                     if (user.getCurrentTimes() == message.getTimes() - 1) {
-                        int length = user.getCurrentMessages().length;
+                        int length = messages.length;
                         int i = user.getCurrentIndex();
                         for (int i1 = 0; i1 < length; i1++) {
                             if (++i >= length) {
                                 i = 0;
                             }
 
-                            if ((user.getCurrentMessages()[i].getPermission() == null || user.getCurrentMessages()[i].getPermission().isEmpty())
-                                    || player.hasPermission(user.getCurrentMessages()[i].getPermission())) {
+                            MessageEntry entry = messages[i];
+                            if ((entry.getPermission() == null || entry.getPermission().isEmpty())
+                                    || player.hasPermission(entry.getPermission())) {
                                 user.setCurrentIndex(i);
                                 break;
                             }
