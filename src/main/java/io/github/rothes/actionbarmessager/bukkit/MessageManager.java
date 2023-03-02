@@ -111,58 +111,61 @@ public final class MessageManager implements Listener {
                     MessageEntry[] messages = user.getCurrentMessages();
                     if (messages.length == 0) continue;
 
-                    boolean send = true;
                     user.setCurrentInterval(user.getCurrentInterval() + 1);
-                    if (plugin.getConfigManager().compromise
-                            && System.currentTimeMillis() - user.getLastOtherActionBar() <= plugin.getConfigManager().compromiseInterval)
-                        send = false;
-                    MessageEntry message = messages[user.getCurrentIndex()];
 
-                    if (message.getInterval() > user.getCurrentInterval()) continue;
+                    MessageEntry message = null;
 
-                    String toSend = PlaceholderAPI.setPlaceholders(player, message.getMessage());
-                    String cache = user.getCache();
-                    if (cache != null && cache.equals(toSend) && System.currentTimeMillis() - user.getCacheTime() < SHOWING_INTERNAL_KEEP) {
-                        send = false;
-                    }
+                    if (!(plugin.getConfigManager().compromise
+                            && System.currentTimeMillis() - user.getLastOtherActionBar() <= plugin.getConfigManager().compromiseInterval)) {
+                        message = messages[user.getCurrentIndex()];
 
-                    if (send) {
-                        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-                        WrappedChatComponent component;
-                        switch (message.getType()) {
-                            case TEXT:
-                                component = WrappedChatComponent.fromLegacyText(toSend);
-                                break;
-                            case JSON:
-                                component = WrappedChatComponent.fromJson(toSend);
-                                break;
-                            default:
-                                throw new AssertionError();
-                        }
-                        PacketContainer packet;
-                        if (SERVER_VERSION >= 19) {
-                            packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
-                            StructureModifier<Integer> integers = packet.getIntegers();
-                            if (integers.size() == 1) {
-                                integers.write(0, (int) EnumWrappers.ChatType.GAME_INFO.getId());
-                            } else {
-                                packet.getBooleans().write(0, true);
+                        if (message.getInterval() > user.getCurrentInterval()) continue;
+
+                        if (checkPermission(player, message.getPermission())) {
+                            String toSend = PlaceholderAPI.setPlaceholders(player, message.getMessage());
+                            String cache = user.getCache();
+                            if (cache == null || !cache.equals(toSend) || System.currentTimeMillis() - user.getCacheTime() >= SHOWING_INTERNAL_KEEP) {
+                                ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+                                WrappedChatComponent component;
+                                switch (message.getType()) {
+                                    case TEXT:
+                                        component = WrappedChatComponent.fromLegacyText(toSend);
+                                        break;
+                                    case JSON:
+                                        component = WrappedChatComponent.fromJson(toSend);
+                                        break;
+                                    default:
+                                        throw new AssertionError();
+                                }
+                                PacketContainer packet;
+                                if (SERVER_VERSION >= 19) {
+                                    packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
+                                    StructureModifier<Integer> integers = packet.getIntegers();
+                                    if (integers.size() == 1) {
+                                        integers.write(0, (int) EnumWrappers.ChatType.GAME_INFO.getId());
+                                    } else {
+                                        packet.getBooleans().write(0, true);
+                                    }
+                                    packet.getStrings().write(0, component.getJson());
+                                } else {
+                                    packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
+                                    packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
+                                    if (packet.getBytes().size() == 1)
+                                        packet.getBytes().write(0, (byte) 2);
+                                    packet.getChatComponents().write(0, component);
+                                }
+                                packet.setMeta("abm_filtered_packet", true);
+                                protocolManager.sendServerPacket(player, packet);
+                                user.setCache(toSend);
+                                user.setCacheTime(System.currentTimeMillis());
                             }
-                            packet.getStrings().write(0, component.getJson());
                         } else {
-                            packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
-                            packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
-                            if (packet.getBytes().size() == 1)
-                                packet.getBytes().write(0, (byte) 2);
-                            packet.getChatComponents().write(0, component);
+                            // skip
+                            message = null;
                         }
-                        packet.setMeta("abm_filtered_packet", true);
-                        protocolManager.sendServerPacket(player, packet);
-                        user.setCache(toSend);
-                        user.setCacheTime(System.currentTimeMillis());
                     }
 
-                    if (user.getCurrentTimes() == message.getTimes() - 1) {
+                    if (message == null || user.getCurrentTimes() == message.getTimes() - 1) {
                         int length = messages.length;
                         int i = user.getCurrentIndex();
                         for (int i1 = 0; i1 < length; i1++) {
@@ -171,8 +174,7 @@ public final class MessageManager implements Listener {
                             }
 
                             MessageEntry entry = messages[i];
-                            if ((entry.getPermission() == null || entry.getPermission().isEmpty())
-                                    || player.hasPermission(entry.getPermission())) {
+                            if (checkPermission(player, entry.getPermission())) {
                                 user.setCurrentIndex(i);
                                 break;
                             }
@@ -189,6 +191,10 @@ public final class MessageManager implements Listener {
             }
 
         }, 0L, 1L);
+    }
+
+    private boolean checkPermission(Player player, String permission) {
+        return permission == null || permission.isEmpty() || player.hasPermission(permission);
     }
 
     void stop() {
