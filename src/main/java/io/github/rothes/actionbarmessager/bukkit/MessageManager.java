@@ -202,9 +202,7 @@ public final class MessageManager implements Listener {
     }
 
     private User getEventUser(@NotNull PacketEvent packetEvent) {
-        Player player = packetEvent.getPlayer();
-        //noinspection ConstantConditions // For ProtocolLib 4 backward support.
-        return player instanceof Player ? plugin.getUserManager().getUser(player) : null;
+        return packetEvent.isPlayerTemporary() ? null : plugin.getUserManager().getUser(packetEvent.getPlayer());
     }
 
     @EventHandler
