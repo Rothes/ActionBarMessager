@@ -87,10 +87,8 @@ public final class ConfigManager {
         int version = config.getInt("Config-Version", 1);
         if (version == 1) {
             ActionBarMessager.info(I18n.getLocaledMessage("Console-Sender.Messages.Initialize.Upgrading-Config", "v1", "v2"));
-            File file = new File(plugin.getDataFolder(), "Config.yml.backup");
             try {
-                file.createNewFile();
-                plugin.getConfig().save(file);
+                plugin.getConfig().save(new File(plugin.getDataFolder(), "Config.yml.backup"));
             } catch (IOException e) {
                 plugin.getLogger().log(Level.SEVERE, "Failed to backup Config.yml", e);
             }
