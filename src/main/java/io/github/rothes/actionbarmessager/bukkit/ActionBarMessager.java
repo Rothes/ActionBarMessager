@@ -49,15 +49,14 @@ public final class ActionBarMessager extends JavaPlugin {
 
     @Override
     public void saveDefaultConfig() {
-        if (!new File(getDataFolder(), "Config.yml").exists()) {
-            config = I18n.getDefaultLocaledConfig();
-            try {
-                config.save(new File(getDataFolder(), "Config.yml"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "Config.yml"));
+        if (new File(getDataFolder(), "Config.yml").exists()) {
+            return;
+        }
+        config = I18n.getDefaultLocaledConfig();
+        try {
+            config.save(new File(getDataFolder(), "Config.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
