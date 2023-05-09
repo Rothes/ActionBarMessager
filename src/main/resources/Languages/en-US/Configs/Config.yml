@@ -16,7 +16,7 @@ Options:
       # Messages of this group.
       Messages:
         - Type: Text  # Message type.
-          Message: '&cYou are in the nether! Dont''t swim in lava!'  # The text displayed.
+          Message: '&cYou are in the nether! Don''t swim in lava!'  # The text displayed.
           Permission: ''  # Required permission. Leave it empty or remove it to ignore permission check.
           Times: 40  # How many times after sending this message to next message.
           Interval: 1  # How many ticks to send for each time.
@@ -24,6 +24,12 @@ Options:
       Worlds:
         - world_nether
         - world_nether_2
+    # Group for disable worlds.
+    Disable:
+      # Empty messages, which means disable messaging.
+      Messages: []
+      Worlds:
+        - disabled_world
     # Default group.
     Default:
       Messages:

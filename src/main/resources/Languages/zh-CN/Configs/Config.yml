@@ -24,6 +24,12 @@ Options:
       Worlds:
         - world_nether
         - world_nether_2
+    # 用于禁用消息发送的消息组.
+    Disable:
+      # 空消息列表, 代表禁用消息发送.
+      Messages: []
+      Worlds:
+        - disabled_world
     # 默认组.
     Default:
       Messages:
