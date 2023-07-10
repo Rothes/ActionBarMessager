@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public final class Updater {
 
     private static final String VERSION_CHANNEL = "Stable";
-    private static final int VERSION_NUMBER = 10;
+    private static final int VERSION_NUMBER = 11;
     private final HashMap<String, Integer> msgTimesMap = new HashMap<>();
 
     public void start() {
