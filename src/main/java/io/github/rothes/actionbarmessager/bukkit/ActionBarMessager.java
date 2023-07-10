@@ -12,12 +12,23 @@ import java.io.IOException;
 
 public final class ActionBarMessager extends JavaPlugin {
 
+    public final static boolean IS_FOLIA;
     private static ActionBarMessager instance;
     private ConfigManager configManager;
     private MessageManager messageManager;
     private UserManager userManager;
 
     private YamlConfiguration config;
+
+    static {
+        boolean folia = true;
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+        } catch (ClassNotFoundException e) {
+            folia = false;
+        }
+        IS_FOLIA = folia;
+    }
 
     @Override
     public void onEnable() {

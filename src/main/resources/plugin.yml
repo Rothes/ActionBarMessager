@@ -3,6 +3,7 @@ main: io.github.rothes.actionbarmessager.bukkit.ActionBarMessager
 version: ${projectVersionString}
 author: Rothes
 api-version: 1.13
+folia-supported: true
 depend:
   - ProtocolLib
   - PlaceholderAPI

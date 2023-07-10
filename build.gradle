@@ -27,6 +27,9 @@ repositories {
 }
 
 dependencies {
+    compileOnly(project(":FoliaWrapper"))  // Works only when targetCompatibility is set to Java17
+    compileOnly(files(projectDir.path + '/libs/folia-wrapper.jar'))  // Created when Folia-Wrapper is built
+
     compileOnly("org.jetbrains:annotations:23.0.0")
     compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.3")

@@ -19,6 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 public final class MessageManager implements Listener {
 
     private static final int SHOWING_INTERNAL_KEEP = 2000;
@@ -102,7 +104,7 @@ public final class MessageManager implements Listener {
         });
 
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+        Runnable runnable = () -> {
             try {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     User user = plugin.getUserManager().getUser(player);
@@ -190,7 +192,12 @@ public final class MessageManager implements Listener {
                 t.printStackTrace();
             }
 
-        }, 0L, 1L);
+        };
+        if (ActionBarMessager.IS_FOLIA) {
+            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, val -> runnable.run(), 0L, 50L, TimeUnit.MILLISECONDS);
+        } else {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, 0L, 1L);
+        }
     }
 
     private boolean checkPermission(Player player, String permission) {

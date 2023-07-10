@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public final class Updater {
 
@@ -21,13 +23,18 @@ public final class Updater {
     private final HashMap<String, Integer> msgTimesMap = new HashMap<>();
 
     public void start() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(ActionBarMessager.getInstance(), () -> {
+        Runnable runnable = () -> {
             try {
                 checkJson(getJson());
             } catch (IllegalStateException | NullPointerException ignored) {
-//                Prism.warn("§c无法正常解析版本信息 Json, 请更新您的插件至最新版本: " + e);
+//                warn("§c无法正常解析版本信息 Json, 请更新您的插件至最新版本: " + e);
             }
-        }, 0L, 72000L);
+        };
+        if (ActionBarMessager.IS_FOLIA) {
+            Bukkit.getAsyncScheduler().runAtFixedRate(ActionBarMessager.getInstance(), val -> runnable.run(), 0L, 1, TimeUnit.HOURS);
+        } else {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(ActionBarMessager.getInstance(), runnable, 0L, 72000L);
+        }
     }
 
     private String getJson() {
