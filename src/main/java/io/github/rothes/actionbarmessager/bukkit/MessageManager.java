@@ -124,7 +124,10 @@ public final class MessageManager implements Listener {
                         if (message.getInterval() > user.getCurrentInterval()) continue;
 
                         if (checkPermission(player, message.getPermission())) {
-                            String toSend = PlaceholderAPI.setPlaceholders(player, message.getMessage());
+                            String toSend = message.getMessage();
+                            if (ActionBarMessager.hasPapi) {
+                                toSend = PlaceholderAPI.setPlaceholders(player, toSend);
+                            }
                             String cache = user.getCache();
                             if (cache == null || !cache.equals(toSend) || System.currentTimeMillis() - user.getCacheTime() >= SHOWING_INTERNAL_KEEP) {
                                 ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();

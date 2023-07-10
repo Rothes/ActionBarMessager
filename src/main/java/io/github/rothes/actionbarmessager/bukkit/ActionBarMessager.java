@@ -12,7 +12,8 @@ import java.io.IOException;
 
 public final class ActionBarMessager extends JavaPlugin {
 
-    public final static boolean IS_FOLIA;
+    public final static boolean IS_FOLIA = isFolia();
+    public static boolean hasPapi;
     private static ActionBarMessager instance;
     private ConfigManager configManager;
     private MessageManager messageManager;
@@ -20,14 +21,13 @@ public final class ActionBarMessager extends JavaPlugin {
 
     private YamlConfiguration config;
 
-    static {
-        boolean folia = true;
+    private static boolean isFolia() {
         try {
             Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
         } catch (ClassNotFoundException e) {
-            folia = false;
+            return false;
         }
-        IS_FOLIA = folia;
+        return true;
     }
 
     @Override
@@ -41,6 +41,8 @@ public final class ActionBarMessager extends JavaPlugin {
         userManager = new UserManager();
         messageManager = new MessageManager();
         messageManager.start(this);
+
+        hasPapi = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
 
         Bukkit.getPluginManager().registerEvents(new Listeners(), this);
 

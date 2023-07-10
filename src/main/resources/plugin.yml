@@ -6,6 +6,7 @@ api-version: 1.13
 folia-supported: true
 depend:
   - ProtocolLib
+softdepend:
   - PlaceholderAPI
 commands:
   actionbarmessager:
