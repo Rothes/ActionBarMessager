@@ -30,11 +30,7 @@ public final class Updater {
 //                warn("§c无法正常解析版本信息 Json, 请更新您的插件至最新版本: " + e);
             }
         };
-        if (ActionBarMessager.IS_FOLIA) {
-            Bukkit.getAsyncScheduler().runAtFixedRate(ActionBarMessager.getInstance(), val -> runnable.run(), 0L, 1, TimeUnit.HOURS);
-        } else {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(ActionBarMessager.getInstance(), runnable, 0L, 72000L);
-        }
+        AbmScheduler.runUpdater(runnable);
     }
 
     private String getJson() {
