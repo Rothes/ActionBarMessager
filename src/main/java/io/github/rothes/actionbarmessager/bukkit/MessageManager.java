@@ -69,6 +69,9 @@ public final class MessageManager implements Listener {
                     User user = getEventUser(e);
                     if (user == null) return;
                     PacketContainer packet = e.getPacket();
+                    if (packet.getMeta("abm_filtered_packet").isPresent()) {
+                        return;
+                    }
                     if (packet.getTitleActions().read(0) == EnumWrappers.TitleAction.ACTIONBAR) {
                         user.setLastOtherActionBar(System.currentTimeMillis());
                         user.setCache(null);
@@ -150,11 +153,16 @@ public final class MessageManager implements Listener {
                                         packet.getBooleans().write(0, true);
                                     }
                                     packet.getStrings().write(0, component.getJson());
-                                } else {
+                                } else if (SERVER_VERSION > 16 || SERVER_VERSION < 11) {
                                     packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
                                     packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
                                     if (packet.getBytes().size() == 1)
                                         packet.getBytes().write(0, (byte) 2);
+                                    packet.getChatComponents().write(0, component);
+                                } else {
+                                    // Have to use this packet, for json color rendering.
+                                    packet = protocolManager.createPacket(PacketType.Play.Server.TITLE);
+                                    packet.getTitleActions().write(0, EnumWrappers.TitleAction.ACTIONBAR);
                                     packet.getChatComponents().write(0, component);
                                 }
                                 packet.setMeta("abm_filtered_packet", true);
