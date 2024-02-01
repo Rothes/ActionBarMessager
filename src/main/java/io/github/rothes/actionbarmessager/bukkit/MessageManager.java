@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
 public final class MessageManager implements Listener {
 
     private static final int SHOWING_INTERNAL_KEEP = 2000;
-    private final short SERVER_VERSION = Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1].split("-")[0]);
-    private final short SERVER_VERSION_MINOR = Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[2].split("-")[0]);
+    private final short SERVER_VERSION = VersionUtil.getServerVersionMajor();
+    private final short SERVER_VERSION_MINOR = VersionUtil.getServerVersionMinor();
     private ActionBarMessager plugin;
 
     void start(ActionBarMessager plugin) {
