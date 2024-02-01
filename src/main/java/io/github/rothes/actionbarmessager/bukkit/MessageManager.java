@@ -23,6 +23,7 @@ public final class MessageManager implements Listener {
 
     private static final int SHOWING_INTERNAL_KEEP = 2000;
     private final short SERVER_VERSION = Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[1].split("-")[0]);
+    private final short SERVER_VERSION_MINOR = Short.parseShort(Bukkit.getServer().getBukkitVersion().split("\\.")[2].split("-")[0]);
     private ActionBarMessager plugin;
 
     void start(ActionBarMessager plugin) {
@@ -152,7 +153,11 @@ public final class MessageManager implements Listener {
                                     } else {
                                         packet.getBooleans().write(0, true);
                                     }
-                                    packet.getStrings().write(0, component.getJson());
+                                    if (SERVER_VERSION >= 20 && SERVER_VERSION_MINOR >= 3) {
+                                        packet.getChatComponents().write(0, component);
+                                    } else {
+                                        packet.getStrings().write(0, component.getJson());
+                                    }
                                 } else if (SERVER_VERSION > 16 || SERVER_VERSION < 11) {
                                     packet = protocolManager.createPacket(PacketType.Play.Server.CHAT);
                                     packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
