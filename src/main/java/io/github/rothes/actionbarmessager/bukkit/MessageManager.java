@@ -153,7 +153,7 @@ public final class MessageManager implements Listener {
                                     } else {
                                         packet.getBooleans().write(0, true);
                                     }
-                                    if (SERVER_VERSION >= 20 && SERVER_VERSION_MINOR >= 3) {
+                                    if (SERVER_VERSION > 20 || (SERVER_VERSION == 20 && SERVER_VERSION_MINOR >= 3)) {
                                         packet.getChatComponents().write(0, component);
                                     } else {
                                         packet.getStrings().write(0, component.getJson());
