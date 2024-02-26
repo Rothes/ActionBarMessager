@@ -19,13 +19,13 @@ import java.util.concurrent.TimeUnit;
 public final class Updater {
 
     private static final String VERSION_CHANNEL = "Stable";
-    private static final int VERSION_NUMBER = 12;
+    private static final int VERSION_NUMBER = 13;
     private final HashMap<String, Integer> msgTimesMap = new HashMap<>();
 
     public void start() {
         Runnable runnable = () -> {
             try {
-                checkJson(getJson());
+                checkJson(getJson((I18n.getLocale().equals("zh-CN") ? "mirror.ghproxy.com/https://" : "") + "raw.githubusercontent.com"));
             } catch (IllegalStateException | NullPointerException ignored) {
 //                warn("§c无法正常解析版本信息 Json, 请更新您的插件至最新版本: " + e);
             }
@@ -33,12 +33,9 @@ public final class Updater {
         AbmScheduler.runUpdater(runnable);
     }
 
-    private String getJson() {
+    private String getJson(String link) {
         try (
-                InputStream stream = new URL(I18n.getLocale().equals("zh-CN") ?
-                        "https://raw.fastgit.org/Rothes/ActionBarMessager/master/Version%20Infos.json" :
-                        "https://raw.githubusercontent.com/Rothes/ActionBarMessager/master/Version%20Infos.json")
-                        .openStream();
+                InputStream stream = new URL("https://" + link + "/Rothes/ActionBarMessager/master/Version%20Infos.json").openStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
         ){
             StringBuilder jsonBuilder = new StringBuilder();
@@ -48,8 +45,11 @@ public final class Updater {
             return jsonBuilder.toString();
         } catch (IOException e) {
             // e.printStackTrace();
+            if (!link.equals("raw.githubusercontent.com")) {
+                return getJson("raw.githubusercontent.com");
+            }
+            return null;
         }
-        return null;
     }
 
     private void checkJson(String json) {
