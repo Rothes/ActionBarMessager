@@ -1,10 +1,9 @@
 {
   "Version_Channels": {
     "Stable": {
-      "Latest_Version_Number": 12,
+      "Latest_Version_Number": 13,
       "Message": {
-        "en-US": "§bA new version (\"1.4.2\") is available!\n§bDownload here: https://www.spigotmc.org/resources/actionbarmessager-1-8-1-18.99939/",
-        "zh-CN": "§b插件有新版本 (\"1.4.2\") 了!\n§b请更新您的插件: https://beta.mcbbs.net/resource/servermod/fp6n6f71"
+        "en-US": "§bA new version (\"1.4.3\") is available!\n§bDownload here: https://www.spigotmc.org/resources/99939/"
       }
     }
   },
