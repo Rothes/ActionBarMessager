@@ -4,7 +4,7 @@ plugins {
 }
 
 group "io.github.rothes.actionbarmessager"
-version "1.4.3"
+version "1.4.4"
 
 repositories {
     mavenCentral()
@@ -57,7 +57,7 @@ processResources {
 
 shadowJar {
     relocate("org.bstats", "io.github.rothes.actionbarmessager.libs.org.bstats")
-    String fileName = "ActionBarMessager v" + project.version + ".jar"
+    String fileName = "ActionBarMessager-" + project.version + ".jar"
     archiveFileName.set(fileName)
 
     minimize()

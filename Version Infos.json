@@ -1,9 +1,9 @@
 {
   "Version_Channels": {
     "Stable": {
-      "Latest_Version_Number": 13,
+      "Latest_Version_Number": 14,
       "Message": {
-        "en-US": "§bA new version (\"1.4.3\") is available!\n§bDownload here: https://www.spigotmc.org/resources/99939/"
+        "en-US": "§bA new version (\"1.4.4\") is available!\n§bDownload here: https://www.spigotmc.org/resources/99939/"
       }
     }
   },
