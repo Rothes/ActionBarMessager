@@ -10,6 +10,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.github.rothes.actionbarmessager.bukkit.user.User;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -136,7 +138,14 @@ public final class MessageManager implements Listener {
                                 WrappedChatComponent component;
                                 switch (message.getType()) {
                                     case TEXT:
-                                        component = WrappedChatComponent.fromLegacyText(toSend);
+                                        if (SERVER_VERSION < 11) {
+                                            // 1.8 - 1.10.2 don't support json colors, have to do this.
+                                            JsonObject jsonObject = new JsonObject();
+                                            jsonObject.addProperty("text", toSend);
+                                            component = WrappedChatComponent.fromJson(jsonObject.toString());
+                                        } else {
+                                            component = WrappedChatComponent.fromLegacyText(toSend);
+                                        }
                                         break;
                                     case JSON:
                                         component = WrappedChatComponent.fromJson(toSend);
