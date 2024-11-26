@@ -31,9 +31,9 @@ dependencies {
     compileOnly(files(projectDir.path + '/libs/folia-wrapper.jar'))  // Created when Folia-Wrapper is built
 
     compileOnly("org.jetbrains:annotations:23.0.0")
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.11.3")
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.2.0-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
     implementation("org.bstats:bstats-bukkit:3.0.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 }
